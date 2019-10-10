@@ -1,0 +1,11 @@
+/* USYD Online Library */
+
+.USYDLib-modify #facets,
+.USYDLib-modify .top-nav-bar,
+.USYDLib-modify .layout-fill.layout-column.zero-padding,
+.USYDLib-modify .advanced-search-backdrop,
+.USYDLib-modify .header.topbar-wrapper.relative-position.layout-column,
+.USYDLib-modify .result-item-image.layout-column,
+.USYDLib-modify #services-index {
+    display: none;
+}
