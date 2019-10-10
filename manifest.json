@@ -3,8 +3,8 @@
 
     "name": "Library download Helper",
     "version": "3.0",
-    "description": "Help the people with impaired vision to find the searching result on USYD online library",
-    "author": "barrier-free",
+    "description": "Help the people with impaired vision to find the searching result",
+    "author": "group: barrier-free",
 
 
     "omnibox": { "keyword": "usyd" },
@@ -24,8 +24,9 @@
 
 
     "background": {
-        "persistent": false,
-        "page": "background.html"
+        "scripts": [
+            "js/background.js"
+        ]
     },
 
 
@@ -39,39 +40,16 @@
     ],
 
 
-    "commands": {
-        "toggle-ScreenReaderHelper": {
-            "suggested_key": {
-                "default": "Alt+A"
-            },
-            "description": "Toggle Library download Helper on or off."
-        },
-        "Search-ScreenReaderHelper": {
-            "suggeted_key": {
-                "default": "Alt+S"
-            },
-            "description": "Quick search the available websites or current content."
-        },
-        "download-ScreenReaderHelper": {
-            "suggeted_key": {
-                "default": "Alt+C"
-            },
-            "description": "Quick download the current article or ebook."
-        }
-    },
 
 
     "content_scripts": [{
         "matches": ["<all_urls>"],
-        "js": ["js/main.js",
-            "js/JSTOR-adapter.js",
-            "js/Ovid-adapter.js",
+        "js": ["js/main.js", "js/JSTOR-adapter.js", "js/Ovid-adapter.js", "js/ProQ-adapter.js",
             "js/EBSCO-adapter.js",
-            "js/Springer-adapter.js",
-            "js/ProQ-adapter.js"
+            "js/Springer-adapter.js"
         ],
         "css": ["css/main.css", "css/Ovid.css"],
-        "run_at": "document_start"
+        "run_at": "document_end"
     }]
 
 
