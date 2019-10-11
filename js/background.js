@@ -3,8 +3,8 @@
  */
 
 
-// add omnibox on Chrome browser
-chrome.omnibox.onInputEntered.addListener((text) => {
+// add omnibox on Firefox browser
+browser.omnibox.onInputEntered.addListener((text) => {
     console.log("inputEntered: " + text);
     if (!text) { return; }
     var texts = text.split(" ");
@@ -21,7 +21,7 @@ chrome.omnibox.onInputEntered.addListener((text) => {
 
 // get current tad id
 function getCurrentTablId(callback) {
-    chrome.tabs.query({ active: true }, function(tabs) {
+    browser.tabs.query({ active: true }, function(tabs) {
         if (callback) { callback(tabs[0].id) }
     });
 }
@@ -29,7 +29,7 @@ function getCurrentTablId(callback) {
 //open a new link at current tab
 function openUrlCurrentTab(url) {
     getCurrentTablId(tabId => {
-        chrome.tabs.update(tabId, { url: url });
+        browser.tabs.update(tabId, { url: url });
     });
 }
 
@@ -46,38 +46,38 @@ var Icon_switch = {};
 function handle_icon_switch(tab) {
     Icon_switch[tab.id] = !Icon_switch[tab.id]
 
-    chrome.tabs.sendMessage(tab.id, { status: "icon_switch", icon_switch: Icon_switch[tab.id] });
+    browser.tabs.sendMessage(tab.id, { status: "icon_switch", icon_switch: Icon_switch[tab.id] });
     if (Icon_switch[tab.id]) {
-        chrome.pageAction.setIcon({
+        browser.pageAction.setIcon({
             tabId: tab.id,
             path: {
                 "32": "image/icon32.png",
                 '128': 'image/icon32.png'
             }
         });
-        chrome.pageAction.setTitle({ tabId: tab.id, title: "Library download helper is ON. Click this button or use Alt+A to disable." });
+        browser.pageAction.setTitle({ tabId: tab.id, title: "Library download helper is ON. Click this button or use Alt+A to disable." });
     } else {
-        chrome.pageAction.setIcon({
+        browser.pageAction.setIcon({
             tabId: tab.id,
             path: {
                 "32": "image/icon32-off.png",
                 '128': 'image/icon32-off.png'
             }
         });
-        chrome.pageAction.setTitle({ tabId: tab.id, title: "Library download helper is OFF. Click this button or use Alt+A to enable." });
+        browser.pageAction.setTitle({ tabId: tab.id, title: "Library download helper is OFF. Click this button or use Alt+A to enable." });
     }
 }
 
 
 // add listener on clicked
-chrome.pageAction.onClicked.addListener(handle_icon_switch);
+browser.pageAction.onClicked.addListener(handle_icon_switch);
 
 // add listener for recieving the message and 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.status === "Page Supported") {
         console.log('Loaded ' + sender.tab.url);
         Icon_switch[sender.tab.id] = true;
-        chrome.pageAction.show(sender.tab.id);
+        browser.pageAction.show(sender.tab.id);
     }
     if (request.status === "icon_switch") {
         handle_icon_switch(sender.tab);
