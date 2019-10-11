@@ -49,10 +49,10 @@
                     if (e.altKey && (e.keyCode === 83 /* s */ )) {
 
                         if (result_content.length == 10) {
-                            current_content();
+                            document.onload = current_content();
                         } else {
                             if (Its_online()) {
-                                available_website();
+                                document.onload = available_website();
                             } else {
                                 var decision = prompt("There is no available online resourse \n 0. Come back to previous page.");
                                 if (decision === null) {
