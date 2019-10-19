@@ -22,21 +22,28 @@
         if (p.website.test(window.location.href)) {
             chrome.runtime.sendMessage({ status: "Page Supported" });
         }
-        if (p.website.test(window.location.href)) {
-            if (p.name == "USYDLib") {
+    });
+
+    // add cheat sheet reminders
+    cheat_sheet = /https?:\/\/sydney\.primo\.exlibrisgroup\.com\/discovery\/search/
+    chrome.storage.sync.get(['CheatSheet'], e => {
+        if (e.CheatSheet) {
+            if (cheat_sheet.test(window.location.href)) {
                 alert("Thanks for using Library download helper. there is a little cheat sheet \n" +
                     "alt+A is an on-off switch \n" +
                     "alt+S is to search available results or databases\n" +
                     "alt+C is to download button (only for databases)");
             }
         }
-    });
+    })
+
 
     // listener for handle switch
     window.addEventListener('keydown', e => {
         if (e.altKey && (e.keyCode === 65 /* a */ )) {
             chrome.runtime.sendMessage({ status: "icon_switch" });
         }
+
     }, true);
 
     // listener for the searching websites
@@ -49,10 +56,10 @@
                     if (e.altKey && (e.keyCode === 83 /* s */ )) {
 
                         if (result_content.length == 10) {
-                            document.onload = current_content();
+                            window.onload = current_content();
                         } else {
                             if (Its_online()) {
-                                document.onload = available_website();
+                                window.onload = available_website();
                             } else {
                                 var decision = prompt("There is no available online resourse \n 0. Come back to previous page.");
                                 if (decision === null) {
@@ -76,8 +83,18 @@
     chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         if (msg.status == "icon_switch" && msg.icon_switch) {
             activate();
+            chrome.storage.sync.get(['On_Off_switch'], e => {
+                if (e.On_Off_switch) {
+                    sound_open();
+                }
+            });
         } else if (msg.status == "icon_switch" && !msg.icon_switch) {
             deactivate();
+            chrome.storage.sync.get(['On_Off_switch'], e => {
+                if (e.On_Off_switch) {
+                    sound_close();
+                }
+            });
         }
     });
 
@@ -100,7 +117,7 @@
     function available_website() {
         var tags = document.getElementsByClassName("item-title md-primoExplore-theme");
         var available_string = "The number of the available websites is " + tags.length + " : \n";
-        available_string = available_string + "0. Come back to previous page. \n"
+        available_string = available_string + "0. Go back to previous page. \n"
         for (var i = 0; i < tags.length; i++) {
             available_string = available_string + (i + 1) + ". " + tags[i].innerText;
             var texts = available_string.split(" ");
@@ -119,7 +136,7 @@
             } else if (texts.includes("Ovid")) {
                 available_string = available_string + "\n";
             } else {
-                available_string = available_string + " (Not Support)" + "\n"
+                available_string = available_string + " (Not Supported)" + "\n"
             }
         }
         var decision = prompt(available_string);
@@ -144,8 +161,8 @@
     function current_content() {
         var result_content = document.getElementsByClassName("list-item-primary-content result-item-primary-content layout-row");
 
-        var available_string = "The first 4 books are" + "\n";
-        for (var i = 0; i < 4; i++) {
+        var available_string = "The available books are " + "\n";
+        for (var i = 0; i < 10; i++) {
             var book_names = result_content[i].childNodes[8].childNodes[2].childNodes[5].innerText;
             available_string = available_string + (i + 1) + ". " + book_names + "\n";
         }
@@ -153,7 +170,7 @@
         if (decision === null) {
             return;
         }
-        if (Number(decision) <= result_content.length - 5) {
+        if (Number(decision) <= 11) {
             window.location.href = result_content[Number(decision) - 1].childNodes[8].childNodes[2].childNodes[5].childNodes[1].href
         } else if (Number(decision) > result_content.length || isNaN(decision)) {
             alert("Please enter the correct number.");
@@ -172,4 +189,17 @@
         }
         return test_online_availbale;
     }
+
+    function sound_open() {
+        var audio = document.createElement("audio");
+        audio.src = "https://freesound.org/data/previews/75/75344_708954-lq.mp3";
+        audio.play();
+    }
+
+    function sound_close() {
+        var audio = document.createElement("audio");
+        audio.src = "https://freesound.org/data/previews/177/177494_33044-lq.mp3";
+        audio.play();
+    }
+
 })();
