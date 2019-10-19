@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "Library download Helper",
-    "version": "3.0",
+    "version": "3.3",
     "description": "Help the people with impaired vision to find the searching result on USYD online library",
     "author": "barrier-free",
 
@@ -72,7 +72,12 @@
         ],
         "css": ["css/main.css", "css/Ovid.css"],
         "run_at": "document_start"
-    }]
+    }],
+
+    "options_ui": {
+        "page": "options.html",
+        "chrome_style": false
+    }
 
 
 
