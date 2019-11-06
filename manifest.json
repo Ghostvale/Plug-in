@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "Library download Helper",
-    "version": "3.3",
+    "version": "3.3.4",
     "description": "Help the people with impaired vision to find the searching result on USYD online library",
     "author": "barrier-free",
 
@@ -70,8 +70,8 @@
             "js/Springer-adapter.js",
             "js/ProQ-adapter.js"
         ],
-        "css": ["css/main.css", "css/Ovid.css"],
-        "run_at": "document_start"
+        "css": ["css/main.css", "css/Ovid.css", "css/ProQ.css", "css/JSTOR.css"],
+        "run_at": "document_end"
     }],
 
     "options_ui": {

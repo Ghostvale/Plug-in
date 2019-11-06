@@ -13,8 +13,16 @@
     }, {
         name: "Ovid-ebook",
         website: /http?:\/\/ovidsp\.dc2\.ovid\.com\.ezproxy1\.library\.usyd\.edu\.au/
+    }, {
+        name: "ProQuest",
+        website: /https?:\/\/\w+-proquest-com\.ezproxy1\.library\.usyd\.edu\.au/
+    }, {
+        name: "JSTOR",
+        website: /https?:\/\/www-jstor-org\.ezproxy1\.library\.usyd\.edu\.au/
     }];
     activate();
+
+
     /**
      * test the current websites whether can be supported
      *  send messgae to background if the page is supproted */
@@ -54,14 +62,16 @@
             if (p.website.test(window.location.href)) {
                 if (p.name == "USYDLib") {
                     if (e.altKey && (e.keyCode === 83 /* s */ )) {
-
-                        if (result_content.length == 10) {
+                        var search = /https?:\/\/sydney\.primo\.exlibrisgroup\.com\/discovery\/search/;
+                        var fulldisplay = /https?:\/\/sydney\.primo\.exlibrisgroup\.com\/discovery\/fulldisplay/;
+                        if (search.test(window.location.href)) {
                             window.onload = current_content();
-                        } else {
+                        }
+                        if (fulldisplay.test(window.location.href)) {
                             if (Its_online()) {
                                 window.onload = available_website();
                             } else {
-                                var decision = prompt("There is no available online resourse \n 0. Come back to previous page.");
+                                var decision = prompt("There is no available online resourse \n You can enter 0 Go back to previous page.");
                                 if (decision === null) {
                                     return;
                                 }
@@ -71,6 +81,7 @@
                                 } else if (Number(decision) != 0 || isNaN(decision)) {
                                     alert("Please enter the correct number.");
                                 }
+
                             }
                         }
                     }
@@ -98,6 +109,7 @@
         }
     });
 
+
     function activate() {
         websites.forEach(p => {
             if (p.website.test(window.location.href)) {
@@ -116,10 +128,10 @@
     //show the avaliable websites.
     function available_website() {
         var tags = document.getElementsByClassName("item-title md-primoExplore-theme");
-        var available_string = "The number of the available websites is " + tags.length + " : \n";
-        available_string = available_string + "0. Go back to previous page. \n"
+        var available_string = "Please enter the number of the available databases\n";
+        available_string = available_string + "0 | Go back to previous page. \n"
         for (var i = 0; i < tags.length; i++) {
-            available_string = available_string + (i + 1) + ". " + tags[i].innerText;
+            available_string = available_string + (i + 1) + " | " + tags[i].innerText;
             var texts = available_string.split(" ");
             if (texts.includes("SpringerNature")) {
                 available_string = available_string + "\n";
@@ -161,17 +173,37 @@
     function current_content() {
         var result_content = document.getElementsByClassName("list-item-primary-content result-item-primary-content layout-row");
 
-        var available_string = "The available books are " + "\n";
-        for (var i = 0; i < 10; i++) {
-            var book_names = result_content[i].childNodes[8].childNodes[2].childNodes[5].innerText;
-            available_string = available_string + (i + 1) + ". " + book_names + "\n";
+        var available_string = "Please enter the number of the available links " + "\n";
+        for (var i = 0; i < result_content.length; i++) {
+            if (result_content[i].childNodes.length > 9) {
+                var book_names = result_content[i].childNodes[10].childNodes[2].childNodes[5];
+                if (book_names == null) {
+                    book_names = result_content[i].childNodes[10].childNodes[4].childNodes[5].innerText;
+                } else {
+                    book_names = result_content[i].childNodes[10].childNodes[2].childNodes[5].innerText;
+                }
+            } else {
+                var book_names = result_content[i].childNodes[8].childNodes[2].childNodes[5];
+                if (book_names == null) {
+                    book_names = result_content[i].childNodes[8].childNodes[4].childNodes[5].innerText;
+                } else {
+                    book_names = result_content[i].childNodes[8].childNodes[2].childNodes[5].innerText;
+                }
+            }
+
+
+            available_string = available_string + (i + 1) + " | " + book_names + "\n";
         }
         var decision = prompt(available_string);
         if (decision === null) {
             return;
         }
         if (Number(decision) <= 11) {
-            window.location.href = result_content[Number(decision) - 1].childNodes[8].childNodes[2].childNodes[5].childNodes[1].href
+            if (result_content[Number(decision) - 1].childNodes.length > 9) {
+                window.location.href = result_content[Number(decision) - 1].childNodes[10].childNodes[2].childNodes[5].childNodes[1].href
+            } else {
+                window.location.href = result_content[Number(decision) - 1].childNodes[8].childNodes[2].childNodes[5].childNodes[1].href
+            }
         } else if (Number(decision) > result_content.length || isNaN(decision)) {
             alert("Please enter the correct number.");
         }
@@ -201,5 +233,4 @@
         audio.src = "https://freesound.org/data/previews/177/177494_33044-lq.mp3";
         audio.play();
     }
-
 })();

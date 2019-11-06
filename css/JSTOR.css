@@ -1,0 +1,8 @@
+.JSTOR-modify #provider-designation-statement,
+.JSTOR-modify .top-bar .pts,
+.JSTOR-modify #pds-mobile-place-holder,
+.JSTOR-modify .left .prl .cover-image,
+.JSTOR-modify .top-bar-title .mvxs .mrs,
+.JSTOR-modify .nav-main {
+    display: none;
+}

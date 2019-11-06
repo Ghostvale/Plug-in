@@ -23,11 +23,11 @@ function JSTOR_Ebook_download() {
     var article_download = document.getElementsByClassName("pdfLink button white-color");
     // download the book
     if (article_download.length == 0) {
-        var available_string = "Available chapters are : \n";
+        var available_string = "Please enter a number to download the chapters \n";
         //available_string = available_string + "0: download the whole book (need Adobe Digital Editions) \n";
         var chapters = document.getElementsByClassName("small-heading inline");
         for (var i = 0; i < chapters.length; i++) {
-            available_string = available_string + (i + 1) + ": " + chapters[i].innerText + "\n";
+            available_string = available_string + (i + 1) + " | " + chapters[i].innerText + "\n";
         }
         var download_link = document.getElementsByClassName("pdfLink tt-track-nolink");
         // open the prompt 

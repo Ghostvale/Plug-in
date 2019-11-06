@@ -17,6 +17,7 @@ chrome.omnibox.onInputEntered.addListener((text) => {
     }
 
     openUrlCurrentTab(href);
+
 });
 
 // get current tad id
@@ -27,9 +28,10 @@ function getCurrentTablId(callback) {
 }
 
 //open a new link at current tab
-function openUrlCurrentTab(url) {
+
+function openUrlCurrentTab(href) {
     getCurrentTablId(tabId => {
-        chrome.tabs.update(tabId, { url: url });
+        chrome.tabs.create({ url: href });
     });
 }
 

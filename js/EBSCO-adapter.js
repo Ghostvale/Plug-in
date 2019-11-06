@@ -24,8 +24,8 @@ function EBSCO_Quick_download() {
     // download the ebook
     if (download_link == null) {
         var fulltext = document.getElementsByClassName("record-type pdf-ft");
-        var available_string = "Please input number as a command: \n";
-        available_string = available_string + "0: open the PDF full text. \n"
+        var available_string = "Please enter the number as a command: \n";
+        available_string = available_string + "0 | open the PDF full text. \n"
         var decision = prompt(available_string);
         if (decision === null) {
             return;

@@ -1,10 +1,8 @@
 /** adapter for the websites: ProQuest database */
-
 var ProQ_websites = [{
     name: "ProQuest",
     website: /https?:\/\/\w+-proquest-com\.ezproxy1\.library\.usyd\.edu\.au/
 }];
-
 
 // listener for the download the PDF files
 window.addEventListener('keydown', e => {
@@ -30,6 +28,7 @@ function ProQ_Quick_download() {
         }
     } else {
         download_button.click();
+        alert("The article is downloading, Please wait a second");
     }
 };
 
@@ -37,14 +36,14 @@ function ProQ_Quick_download() {
 // quickly download the ebook
 function ProQ_ebook_download() {
 
-    var available_string = "Available chapters are: \n";
-    available_string = available_string + "0: Read book online \n";
+    var available_string = "Please enter a number to download the chapters\n";
+    available_string = available_string + "0 | Read book online \n";
     //available_string = available_string + "0: download the whole book (need Adobe Digital Editions) \n";
 
     // download the different chapters 
     var chapters = document.getElementsByClassName("toc toc-l-1");
     for (var i = 0; i < chapters.length; i++) {
-        available_string = available_string + (i + 1) + ": " + chapters[i].childNodes[1].childNodes[1].childNodes[1].innerText + "\n"
+        available_string = available_string + (i + 1) + " | " + chapters[i].childNodes[1].childNodes[1].childNodes[1].innerText + "\n"
     }
     // open the prompt 
     var decision = prompt(available_string);
@@ -55,13 +54,18 @@ function ProQ_ebook_download() {
     if (Number(decision) <= chapters.length && Number(decision) > 0) {
         //window.open(tags[Number(decision)]);
         chapters[Number(decision) - 1].childNodes[1].childNodes[3].childNodes[1].childNodes[1].childNodes[1].click()
-        var chapter_download = document.getElementById("chapterOpenPDF");
-        chapter_download.click();
+        setTimeout("chapter_download()", 2000);
+        alert("The article is downloading, Please wait a second");
     } else if (Number(decision) == 0) {
         document.getElementById("availableOnlineReadId").click();
     } else if (Number(decision) > chapters.length || isNaN(decision)) {
         alert("Please enter the correct number.");
     }
+}
+
+function chapter_download() {
+    var chapter_download = document.getElementById("chapterOpenPDF");
+    chapter_download.click();
 }
 
 function Readbook_online() {
@@ -82,4 +86,5 @@ function Readbook_online() {
 
 
 }
+
 //module.exports = { ProQ_websites, ProQ_Quick_download, ProQ_ebook_download };

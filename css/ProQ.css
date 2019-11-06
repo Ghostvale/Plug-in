@@ -1,0 +1,7 @@
+.ProQuest-modify #headerContainer,
+.ProQuest-modify .collapse .navbar-collapse,
+.ProQuest-modify #subheadContainer,
+.ProQuest-modify #leftCol,
+.ProQuest-modify .col-md-4 {
+    display: none;
+}
